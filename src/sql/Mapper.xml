@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+		
+		
+<mapper namespace="Mapper">
+    
+    <resultMap id="locationSelectMap" type="local">
+  		<result property="locationName" column="local_name" 	jdbcType="VARCHAR"/>
+  		<result property="lat" 			column="latitude" 		jdbcType="VARCHAR"/>
+  		<result property="lng" 			column="longitude" 		jdbcType="VARCHAR"/>
+  		<result property="altitude" 	column="altitude" 		jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<resultMap id="beaconSelectMap" type="Beacon">
+  	    <result property="regionName" 	column="region_name" 	jdbcType="VARCHAR"/>
+  		<result property="uuid" 		column="uuid" 			jdbcType="VARCHAR"/>
+  		<result property="major" 		column="major" 			jdbcType="INTEGER"/>
+  		<result property="minor" 		column="minor" 			jdbcType="INTEGER"/>
+  	</resultMap>
+  	
+    <select id="getLocationInfo" resultMap="locationSelectMap">
+  		SELECT
+		local_no, local_name, latitude, longitude, altitude
+		FROM local_info
+  	</select>
+  	
+    <select id="getRegionInfo" parameterType="Beacon" resultMap="beaconSelectMap">
+  		SELECT
+		region_no, region_name, uuid, major, minor, local_no
+		FROM region_info
+		WHERE uuid=#{uuid} AND major=#{major} AND minor=#{minor}
+  	</select>
+  	
+<!-- 
+	<resultMap id="localSelectMap" type="local">
+		<result property="localNo" 		column="local_no" 		jdbcType="INTEGER"/>
+  		<result property="localName" 	column="local_name" 	jdbcType="VARCHAR"/>
+  		<result property="gpsX" 		column="gps_x" 			jdbcType="VARCHAR"/>
+  		<result property="gpsY" 		column="gps_y" 			jdbcType="VARCHAR"/>
+  	</resultMap>
+  	
+  	<resultMap id="dataSelectMap" type="data">
+  		<result property="dataNo" 	column="data_no" 			jdbcType="INTEGER"/>
+  		<result property="dataPath" 	column="data_path" 		jdbcType="VARCHAR"/>
+  		<result property="dataType" 	column="data_type" 		jdbcType="INTEGER"/>
+  		<result property="localNo" 		column="local_no" 		jdbcType="INTEGER"/>
+  		<result property="regionNo" 	column="region_no" 		jdbcType="INTEGER"/>
+  	</resultMap>
+	
+	<select id="getLocalInfo" resultMap="localSelectMap">
+  		SELECT
+		local_no, local_name, gps_x, gps_y 
+		FROM local_info
+  	</select>
+  	
+  	<select id="getDataByLocal" parameterType="int" resultMap="dataSelectMap">
+  		SELECT
+		data_no, data_path, data_type, local_no
+		FROM data_info
+		WHERE local_no=#{value}
+  	</select>
+
+	<select id="getDataByBeacon" parameterType="beacon" resultMap="dataSelectMap">
+	    SELECT
+		data.data_no, data.data_path, data.data_type, data.local_no, data.region_no 
+		FROM data_info data, region_info region 
+		WHERE data.region_no(+) = region.region_no 
+			AND region.uuid = #{uuid} AND region.major=#{major} AND region.minor=#{minor} 
+	</select>
+  	
+  	<select id="findBeacon" parameterType="beacon" resultType="beacon">
+  		SELECT
+		uuid, major, minor
+		FROM region_info
+		WHERE uuid=#{uuid} AND major=#{major} AND minor=#{minor}
+  	</select>
+  	
+  	<insert id="insertData" parameterType="data">
+		INSERT
+		INTO data_infodata_no, data_path, data_type, local_no
+		VALUES TOUR_DATA.nextval, #{dataPath}, #{dataType}, #{localNo}
+	</insert>
+  	 -->  
+</mapper>
